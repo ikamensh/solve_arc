@@ -6,6 +6,8 @@ from arc import ArcColors
 
 from arc.types import ArcGrid
 
+from priors.space import adjacent
+
 Cell = Tuple[int, int]
 
 
@@ -81,21 +83,6 @@ class ArcObject:
 
         for cell in self.mask:
             grid[cell] = ArcColors.BLACK
-
-
-def adjacent(grid: ArcGrid, cell: Cell, diag: bool) -> Set[Cell]:
-    x, y = cell
-    candidates = [(x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)]
-    if diag:
-        candidates += [(x+1, y+1), (x+1, y-1), (x-1, y-1), (x-1, y+1)]
-    result = set()
-    h, w = grid.shape
-    for c in candidates:
-        x, y = c
-        if 0 <= x < h and 0 <= y < w:
-            result.add(c)
-
-    return result
 
 
 def merge(grid: ArcGrid, start: Cell, diag: bool, multicolor:bool) -> ArcObject:

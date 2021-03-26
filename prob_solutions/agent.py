@@ -50,10 +50,13 @@ class HardcodedAgent(RandomAgent):
                     score = -1
                 else:
                     score = np.mean(out == pair.y)
+                    if out.shape == pair.y.shape:
+                        score += 1
+
                 demo_results[sol].append(score)
 
         demo_results = {sol: sum(scores) for sol, scores in demo_results.items()}
-        best = sorted(self.solutions, key=demo_results.__getitem__)[:3]
+        best = sorted(self.solutions, key=demo_results.__getitem__, reverse=True)[:3]
 
         result = []
         for tg in test_grids:

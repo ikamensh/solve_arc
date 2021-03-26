@@ -1,4 +1,5 @@
-from priors.objectness import find_objects, adjacent, ArcObject
+from priors.objectness import find_objects, ArcObject
+from priors.space import adjacent
 from arc import get_train_problem_by_uid, ArcColors
 
 import numpy as np
