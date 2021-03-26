@@ -49,7 +49,9 @@ class ArcObject:
 
     def as_grid(self) -> ArcGrid:
         result = np.zeros([self.heigth, self.width], dtype=np.uint8)
-        self.draw(result)
+        new = self.copy()
+        new.upper_left = (0, 0)
+        new.draw(result)
         return result
 
     def overlap(self, other: "ArcObject") -> Set[Cell]:
@@ -81,9 +83,11 @@ class ArcObject:
             grid[cell] = ArcColors.BLACK
 
 
-def adjacent(grid: ArcGrid, cell: Cell) -> Set[Cell]:
+def adjacent(grid: ArcGrid, cell: Cell, diag: bool) -> Set[Cell]:
     x, y = cell
     candidates = [(x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)]
+    if diag:
+        candidates += [(x+1, y+1), (x+1, y-1), (x-1, y-1), (x-1, y+1)]
     result = set()
     h, w = grid.shape
     for c in candidates:
@@ -94,27 +98,27 @@ def adjacent(grid: ArcGrid, cell: Cell) -> Set[Cell]:
     return result
 
 
-def merge(grid: ArcGrid, start: Cell) -> ArcObject:
+def merge(grid: ArcGrid, start: Cell, diag: bool, multicolor:bool) -> ArcObject:
     visited = {start}
     color = grid[start]
-    stack = list(adjacent(grid, start))
+    stack = list(adjacent(grid, start, diag))
     while stack:
         nxt = stack.pop()
-        if grid[nxt] == color:
+        if grid[nxt] == color or (multicolor and grid[nxt] != ArcColors.BLACK):
             visited.add(nxt)
-            stack += list(adjacent(grid, nxt) - visited)
+            stack += list(adjacent(grid, nxt, diag) - visited)
 
     return ArcObject(visited, color)
 
 
-def find_objects(grid: ArcGrid) -> List[ArcObject]:
+def find_objects(grid: ArcGrid, allow_diag: bool=False, multicolor: bool = False) -> List[ArcObject]:
     results = []
     grid = np.copy(grid)
     for i in range(grid.shape[0]):
         for j in range(grid.shape[1]):
             if grid[i, j] == 0:
                 continue
-            new_obj = merge(grid, (i, j))
+            new_obj = merge(grid, (i, j), allow_diag, multicolor)
             results.append(new_obj)
             for cell in new_obj.mask:
                 grid[cell] = 0

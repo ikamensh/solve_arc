@@ -9,7 +9,9 @@ from prob_solutions.agent import solutions_dir, import_module
 
 solved = [
     "1a07d186",
-    "54d82841"
+    "54d82841",
+    "be94b721",
+    "2013d3e2"
 ]
 @pytest.fixture(params=solved)
 def problem(request):
