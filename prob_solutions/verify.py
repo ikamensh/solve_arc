@@ -1,4 +1,4 @@
-from arc import train_set, ArcIOPair, get_train_problem_by_uid
+from arc import train_problems, ArcIOPair, get_train_problem_by_uid
 
 from arc.evaluation import evaluate_agent
 
@@ -6,7 +6,7 @@ from prob_solutions.agent import HardcodedAgent
 
 agent = HardcodedAgent()
 
-result = evaluate_agent(agent, train_set)
+result = evaluate_agent(agent, train_problems)
 print(result)
 
 # for prob in result.correct:
