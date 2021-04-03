@@ -12,7 +12,8 @@ solved = [
     "54d82841",
     "be94b721",
     "2013d3e2",
-    "7f4411dc"
+    "7f4411dc",
+    "05269061"
 ]
 @pytest.fixture(params=solved)
 def problem(request):
